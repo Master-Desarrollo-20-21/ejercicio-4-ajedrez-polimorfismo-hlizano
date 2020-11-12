@@ -1,16 +1,14 @@
 
 public class King extends Piece{
 
-	public King(char name, String color) {
-		super(name,color);
+	public King(char name, String color, Coordinate coordinate) {
+		super(name,color, coordinate);
 	}
 
 	@Override
-	protected String validate(Board board, Player player) {
+	protected TargetPath validatePath(Piece targetPiece) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
 
 }

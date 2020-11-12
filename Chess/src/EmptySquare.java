@@ -1,15 +1,14 @@
 
 public class EmptySquare extends Piece{
 
-	public EmptySquare(char name, String color) {
-		super(name,color);
+	public EmptySquare(char name, String color, Coordinate coordinate) {
+		super(name,color, coordinate);
 	}
 
 	@Override
-	protected String validate(Board board, Player player) {
+	protected TargetPath validatePath(Piece targetPiece) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 }

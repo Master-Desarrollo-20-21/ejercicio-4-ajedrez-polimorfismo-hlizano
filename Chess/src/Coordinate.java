@@ -21,7 +21,52 @@ public class Coordinate {
 	}
 	
 	public boolean equal(Coordinate coordinate) {
-		return this.row == coordinate.getRow() && this.column == coordinate.getColumn();
+		return this.equalRow(coordinate) && this.equalColumn(coordinate);
+	}
+	
+	public boolean equalRow(Coordinate coordinate) {
+		return this.row == coordinate.getRow();
+	}
+	
+	public boolean equalColumn(Coordinate coordinate) {
+		return this.column == coordinate.getColumn();
+	}
+	
+	public boolean inRow(Coordinate coordinate){
+		return this.row == coordinate.row;
+	}
+	
+	public boolean inColumn(Coordinate coordinate){
+		return this.column == coordinate.column;
+	}
+	
+	public boolean inDiagonal(Coordinate coordinate){
+        return  this.row - this.column == coordinate.row - coordinate.column ||
+                this.row + this.column == coordinate.row + coordinate.column;
+    }
+	
+	public int getHorizontalDistance(Coordinate coordinate) {
+        return Math.abs(this.getRow() - coordinate.getRow());        
+    }
+	
+	public int getVerticalDistance(Coordinate coordinate) {
+        return Math.abs(this.getColumn() - coordinate.getColumn());
+    }
+	
+	public boolean isRowGreaterThan(Coordinate coordinate) {
+		return this.getRow()>coordinate.getRow();
+	}
+	
+	public boolean isColumnGreaterThan(Coordinate coordinate) {
+		return this.getColumn()>coordinate.getColumn();
+	}
+	
+	public boolean doubleJumpWhitePawnMovement(Coordinate coordinate) {
+		return this.getRow() == 1 && coordinate.getRow() == 3; 
+	}
+	
+	public boolean doubleJumpBlackPawnMovement(Coordinate coordinate) {
+		return this.getRow() == 6 && coordinate.getRow() == 4; 
 	}
 
     public void position(String msg) {
@@ -45,62 +90,6 @@ public class Coordinate {
     private boolean isValid() {
         return 0 <= this.row && this.row <= 7 &&
         		0 <= this.column && this.column <= 7;
-    }
+    }   
     
-    public int getDiagonalDirection(Coordinate destiny) {    	
-    	if(this.row>destiny.row && this.column<destiny.column) {
-    		return checkFirstQuadrant(destiny);    		
-    	}
-    	if(this.row>destiny.row && this.column>destiny.column) {
-    		return checkSecondQuadrant(destiny);    		
-    	}   
-    	if(this.row<destiny.row && this.column>destiny.column) {
-    		return checkThirdQuadrant(destiny);    		
-    	} 
-    	if(this.row<destiny.row && this.column<destiny.column) {
-    		return checkFourthQuadrant(destiny);    		
-    	} 
-    	return 0;
-    }
-
-	private int checkFirstQuadrant(Coordinate destiny) {
-		int i = 1;
-		while(this.row-i>=0 && this.column+i<=7) {
-			if(destiny.row == this.row-i && destiny.column == this.column+i)
-				return 1;
-			i++;
-		}
-		return 0;
-	}
-
-	private int checkSecondQuadrant(Coordinate destiny) {
-		int i = 1;
-		while(this.row-i>=0 && this.column-i>=0) {
-			if(destiny.row == this.row-i && destiny.column == this.column-i)
-				return 2;
-			i++;
-		}
-		return 0;
-	}
-	
-	private int checkThirdQuadrant(Coordinate destiny) {
-		int i = 1;
-		while(this.row+i<=7 && this.column-i>=0) {
-			if(destiny.row == this.row+i && destiny.column == this.column-i)
-				return 3;
-			i++;
-		}
-		return 0;
-	}
-
-	private int checkFourthQuadrant(Coordinate destiny) {
-		int i = 1;
-		while(this.row+i<=7 && this.column-i<=7) {
-			if(destiny.row == this.row+i && destiny.column == this.column+i)
-				return 4;
-			i++;
-		}
-		return 0;
-	}
-
 }

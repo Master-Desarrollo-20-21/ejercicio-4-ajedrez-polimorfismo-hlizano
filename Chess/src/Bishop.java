@@ -1,15 +1,35 @@
 public class Bishop extends Piece{
 
-	public Bishop(char name, String color) {
-		super(name,color);
+	public Bishop(char name, String color, Coordinate coordinate) {
+		super(name,color, coordinate);
+	}
+	
+
+	@Override
+	protected TargetPath validatePath(Piece targetPiece) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/*
+
+	@Override
+	protected String validate(Board board) {
+		String targetColor = board.getPiece(target).getColor();
+		if(!origin.inDiagonal(target))
+			return "Error!!! La ruta destino no está en diagonal con el origen";
+
+		
+		
+		return null;
 	}
 
 	@Override
-	protected String validate(Board board, Player player) {
+	protected String validate(String colorDestiny, Player player) {
 		int diagonalDirection = origin.getDiagonalDirection(destiny);
 		boolean freeRoad = false;
-		if(diagonalDirection == 0) 
-			return "Error!!! La ruta destino no está en diagonal con el origen";
+
+			
 		if(diagonalDirection == 1) 
 			freeRoad = this.isFreeDiagonalPathFirstQuad(board);
 		if(diagonalDirection == 2) 
@@ -69,5 +89,7 @@ public class Bishop extends Piece{
 		}
 		return true;
 	}
+
+*/
 
 }

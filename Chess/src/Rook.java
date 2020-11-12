@@ -1,65 +1,24 @@
 public class Rook extends Piece{
 
-	public Rook(char name, String color) {
-		super(name,color);
+	public Rook(char name, String color, Coordinate coordinate) {
+		super(name,color, coordinate);
 	}
-
+	
 	@Override
-	protected String validate(Board board, Player player) {
-		if( originX  == destinyX && originY!= destinyY && !board.getPiece(destiny).getColor().equals(color)) {
-			boolean freeRoad = this.isFreeHorizontalPath(board, originY, destinyY);
-			if(freeRoad) 
-				return "";
-			else 
-				return "Error, hay piezas en medio del camino";
+	protected TargetPath validatePath(Piece targetPiece) {
+		
+		Coordinate origin = this.getCoordinate();
+		Coordinate target = targetPiece.getCoordinate();
+		if( origin.inRow(target) && !origin.inColumn(target)) {
+			if(origin.getRow()<target.getRow())
+				return TargetPath.SOUTH;
+			return TargetPath.NORTH;
 		}
-		if( originY == destinyY && originX!=destinyX && !board.getPiece(destiny).getColor().equals(color)) {
-			boolean freeRoad = this.isFreeVerticalPath(board, originX, destinyX);
-			if(freeRoad) 
-				return "";
-			else 
-				return "Error, hay piezas en medio del camino";
+		if( origin.inColumn(target) && !origin.inRow(target)) {
+			if(origin.getColumn()<target.getColumn())
+				return TargetPath.EAST;
+			return TargetPath.WEST;
 		}
-		return "ERROR a la hora de querer mover la torre";
-	}
-	
-	protected boolean isFreeHorizontalPath(Board board, int coordY1, int coordY2 ) {
-		if(coordY1<coordY2) {
-			for(int i = coordY1+1; i<coordY2; i++) {
-				if(board.getPiece(new Coordinate(originX, i)).getName()!='_') {
-					return false;
-				}
-			}
-			return true;
-		}
-		if(coordY1>coordY2) {
-			for(int i = coordY2+1; i<coordY1; i++) {
-				if(board.getPiece(new Coordinate(originX, i)).getName()!='_') {
-					return false;
-				}
-			}
-			return true;
-		}
-		return false;
-	}
-	
-	protected boolean isFreeVerticalPath(Board board, int coordX1, int coordX2 ) {
-		if(coordX1<coordX2) {
-			for(int i = coordX1+1; i<coordX2; i++) {
-				if(board.getPiece(new Coordinate(i, originY)).getName()!='_') {
-					return false;
-				}
-			}
-			return true;
-		}
-		if(coordX1>coordX2) {
-			for(int i = coordX2+1; i<coordX1; i++) {
-				if(board.getPiece(new Coordinate(i, originY)).getName()!='_') {
-					return false;
-				}
-			}
-			return true;
-		}
-		return false;
+		return TargetPath.INVALID;
 	}
 }

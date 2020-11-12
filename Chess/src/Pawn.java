@@ -1,52 +1,69 @@
 public class Pawn extends Piece{
 	
-	public Pawn(char name, String color) {
-		super(name,color);
+	public Pawn(char name, String color, Coordinate coordinate) {
+		super(name,color, coordinate);
 	}	
 
 	@Override
-	protected String validate(Board board, Player player) {
-
-		switch(this.getName()) {
-		case 'P':
-			return this.validateWhites(board, player);			
-		case 'p':
-			return this.validateBlacks(board, player);		
-		}
-		return "ERROR ficha inválida";
+	protected TargetPath validatePath(Piece target) {
 		
+		switch(this.getName()) {
+			case 'P':
+				return this.validateWhites(target);			
+			case 'p':
+				return this.validateBlacks(target);		
+		}
+		return TargetPath.INVALID;		
 	}
 
-	private String validateWhites(Board board, Player player) {
-		if(originX + 1 == destinyX && originY == destinyY && board.getPiece(destiny).getName()=='_') {
-			return "";
+	private TargetPath validateWhites(Piece targetPiece) {
+		
+		Coordinate origin = this.getCoordinate();
+		Coordinate target = targetPiece.getCoordinate();
+		
+		if(origin.equalColumn(target) && origin.getHorizontalDistance(target) == 1 && 
+				!origin.isRowGreaterThan(target) && targetPiece.getName()=='_') {
+			return TargetPath.SOUTH;
 		}
-		if(player.firstMovement() && originX + 2 == destinyX && originY == destinyY && board.getPiece(destiny).getName()=='_') {
-			return "";
+		if(origin.doubleJumpWhitePawnMovement(target) && origin.inColumn(target) && targetPiece.getName()=='_') {
+			return TargetPath.SOUTH;
 		}
-		if(originX + 1 == destinyX && originY-1 == destinyY && board.getPiece(destiny).getColor().equals("black")) {
-			return "";
+		if(origin.getHorizontalDistance(target) == 1 && !origin.isRowGreaterThan(target) && 
+				origin.getVerticalDistance(target) == 1 && origin.getColumn()>target.getColumn() && 
+				targetPiece.getColor().equals("black")) {
+			return TargetPath.SOUTHWEST;
 		}
-		if(originX + 1 == destinyX && originY+1 == destinyY && board.getPiece(destiny).getColor().equals("black")) {
-			return "";
-		}		
-		return "ERROR a la hora de querer mover el peon blanco";
+		if(origin.getVerticalDistance(target) == 1 && !origin.isRowGreaterThan(target) && 
+				origin.getHorizontalDistance(target) == 1 && origin.getColumn()<target.getColumn() && 
+				targetPiece.getColor().equals("black")) {
+			return TargetPath.SOUTHEAST;
+		}
+		return TargetPath.INVALID;		
 	}
 
-	private String validateBlacks(Board board, Player player) {
-		if(originX - 1 == destinyX && originY == destinyY && board.getPiece(destiny).getName()=='_') {
-			return "";
+	private TargetPath validateBlacks(Piece targetPiece) {
+		
+		Coordinate origin = this.getCoordinate();
+		Coordinate target = targetPiece.getCoordinate();
+		
+		if(origin.equalColumn(target) && origin.getHorizontalDistance(target) == 1 && 
+				origin.isRowGreaterThan(target) && targetPiece.getName()=='_') {
+			return TargetPath.NORTH;
 		}
-		if(player.firstMovement() && originX - 2 == destinyX && originY == destinyY && board.getPiece(destiny).getName()=='_') {
-			return "";
+		if(origin.doubleJumpBlackPawnMovement(target) && origin.inColumn(target) && targetPiece.getName()=='_') {
+			return TargetPath.NORTH;
 		}
-		if(originX - 1 == destinyX && originY-1 == destinyY && board.getPiece(destiny).getColor().equals("white")) {
-			return "";
+		if(origin.getHorizontalDistance(target) == 1 && origin.isRowGreaterThan(target) && 
+				origin.getVerticalDistance(target) == 1 && origin.getColumn()>target.getColumn() && 
+				targetPiece.getColor().equals("white")) {
+			return TargetPath.NORTHWEST;
 		}
-		if(originX - 1 == destinyX && originY+1 == destinyY && board.getPiece(destiny).getColor().equals("white")) {
-			return "";
-		}		
-		return "ERROR a la hora de querer mover el peon negro";
+		if(origin.getVerticalDistance(target) == 1 && origin.isRowGreaterThan(target) && 
+				origin.getHorizontalDistance(target) == 1 && origin.getColumn()<target.getColumn() && 
+				targetPiece.getColor().equals("white")) {
+			return TargetPath.NORTHEAST;
+		}
+		return TargetPath.INVALID;
 	}
 
 }
